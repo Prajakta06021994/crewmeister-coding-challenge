@@ -5,12 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @Component
 public class ExchangeRateScheduler {
+
     @Autowired
     private ExchangeRateService exchangeRateService;
-    @Scheduled(fixedRate = 60 * 60 * 1000) // every 5 minutes
+
+    @PostConstruct
+    public void runOnStartup() {
+        exchangeRateService.fetchAndStoreExchangeRatesForAllCurrencies();
+    }
+
+    @Scheduled(cron = "0 0 6 ? * MON")  // weekly on Monday at 6AM
     public void scheduledFetchExchangeRate() {
         log.info("Running scheduled fetch of exchange rates...");
         exchangeRateService.fetchAndStoreExchangeRatesForAllCurrencies();
