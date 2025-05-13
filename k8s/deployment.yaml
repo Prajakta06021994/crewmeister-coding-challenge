@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fx-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fx-app
+  template:
+    metadata:
+      labels:
+        app: fx-app
+    spec:
+      containers:
+        - name: fx-container
+          image: fx-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: fx-config  # Reference the ConfigMap for environment variables
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+      volumes:
+        - name: config-volume
+          configMap:
+            name: fx-config  # Reference the ConfigMap for mounting if you still need it

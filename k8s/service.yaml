@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fx-service
+spec:
+  selector:
+    app: fx-app
+  ports:
+    - protocol: TCP
+      port: 8080          # Exposing port 8080
+      targetPort: 8080     # Forward traffic to container port 8080
+  type: LoadBalancer

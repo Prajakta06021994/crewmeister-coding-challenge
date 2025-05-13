@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fx-config
+data:
+  DB_URL: jdbc:h2:mem:test
+  DB_USERNAME: sa
+  DB_PASSWORD: password
+  SPRING_PROFILES_ACTIVE: prod
+  bundesbank.url.template: https://www.bundesbank.de/statistic-rmi/StatisticDownload?tsId=%s&its_csvFormat=en&mode=its
+  bundesbank.tsId.template: BBEX3.D.%s.EUR.BB.AC.000
