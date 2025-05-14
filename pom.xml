@@ -83,6 +83,7 @@
 							<excludes>
 								<exclude>**/dto/**</exclude>
 								<exclude>**/config/**</exclude>
+								<exclude>**/constants/**</exclude>
 								<exclude>**/exception/**</exclude>
 								<exclude>**/repository/**</exclude>
 								<exclude>**/entity/**</exclude>
@@ -104,7 +105,7 @@
 										<limit>
 											<counter>INSTRUCTION</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.10</minimum>
+											<minimum>0.70</minimum>
 										</limit>
 									</limits>
 								</rule>

@@ -61,7 +61,7 @@ class ExchangeRateControllerIntegrationTest {
     }
 
     @Test
-    void convertToEuro_shouldReturnConversionResult() throws Exception {
+    void shouldConvertToEuroShouldReturnConversionResult() throws Exception {
         mockMvc.perform(get("/api/convert")
                         .param("currency", "USD")
                         .param("amount", "110.00")
@@ -81,7 +81,7 @@ class ExchangeRateControllerIntegrationTest {
     }
 
     @Test
-    void convertToEuro_invalidCurrency_shouldReturnBadRequest() throws Exception {
+    void shouldConvertToEuroInvalidCurrencyShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/api/convert")
                         .param("currency", "XXX")
                         .param("amount", "100.00")
@@ -91,7 +91,7 @@ class ExchangeRateControllerIntegrationTest {
     }
 
     @Test
-    void convertToEuro_rateNotFound_shouldReturnNotFound() throws Exception {
+    void shouldConvertToEuroRateNotFoundShouldReturnNotFound() throws Exception {
         mockMvc.perform(get("/api/convert")
                         .param("currency", "USD")
                         .param("amount", "100.00")

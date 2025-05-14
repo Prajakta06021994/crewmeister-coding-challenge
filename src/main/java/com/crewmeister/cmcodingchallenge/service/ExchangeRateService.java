@@ -3,21 +3,15 @@ package com.crewmeister.cmcodingchallenge.service;
 import com.crewmeister.cmcodingchallenge.config.SupportedCurrenciesConfig;
 import com.crewmeister.cmcodingchallenge.dto.ConversionResultDTO;
 import com.crewmeister.cmcodingchallenge.dto.ExchangeRateDTO;
-import com.crewmeister.cmcodingchallenge.entity.ExchangeRate;
 import com.crewmeister.cmcodingchallenge.exception.ResourceNotFoundException;
 import com.crewmeister.cmcodingchallenge.repository.ExchangeRateRepository;
+import com.crewmeister.cmcodingchallenge.strategy.ExchangeRateFetchStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,13 +27,7 @@ public class ExchangeRateService {
     private SupportedCurrenciesConfig config;
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Value("${bundesbank.url.template}")
-    private String urlTemplate;
-
-    @Value("${bundesbank.tsId.template}")
-    private String tsIdTemplate;
+    private List<ExchangeRateFetchStrategy> strategies;
 
     public List<String> getAllCurrencies(){
         List<String> currencies = exchangeRateRepository.findDistinctCurrencies()
@@ -111,82 +99,18 @@ public class ExchangeRateService {
                 .forEach(this::fetchAndStoreExchangeRates);
     }
 
-    // Logic to fetch and parse CSV from Bundesbank
-    @Transactional
     public void fetchAndStoreExchangeRates(String currency) {
-        var tsId = buildTsId(currency);
-        var url = buildUrl(tsId);
-
-        log.info("Fetching rates for currency: {}", currency);
-
-        try (InputStream inputStream = openUrlStream(url);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-
-            List<String[]> dataLines = reader.lines()
-                    .skip(5) // Skip header/meta
-                    .map(line -> line.replace("\"", "").split("\t|,"))
-                    .filter(parts -> parts.length >= 2)
-                    .collect(Collectors.toList());
-
-            if (dataLines.stream().noneMatch(parts -> isValidRate(parts[1]))) {
-                log.warn("Currency {} is not supported based on rate data", currency);
+        for (ExchangeRateFetchStrategy strategy : strategies) {
+            try {
+                strategy.fetchAndStoreExchangeRates(currency);
+                log.info("Saved rates for currency for the provider {} ", strategy.getProvider());
                 return;
+            } catch (Exception e) {
+                log.warn("Strategy failed for provider {} with error {}", strategy.getProvider(),
+                        e.getMessage());
             }
-
-            List<ExchangeRate> rates = dataLines.stream()
-                    .map(parts -> parseExchangeRate(parts, currency))
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-
-            if (!rates.isEmpty()) {
-                exchangeRateRepository.saveAll(rates);
-                log.info("Saved {} rates for currency {}", rates.size(), currency);
-            } else {
-                log.warn("No valid exchange rates found for currency {}", currency);
-            }
-
-        } catch (IOException e) {
-            log.error("Failed to download or parse CSV for {}: {}", currency, e.getMessage());
         }
-    }
-
-    private ExchangeRate parseExchangeRate(String[] parts, String currency) {
-        try {
-            LocalDate date = LocalDate.parse(parts[0].trim());
-            BigDecimal rate = parseRate(parts[1].trim());
-
-            ExchangeRate exchangeRate = new ExchangeRate();
-            exchangeRate.setCurrencyCode(currency);
-            exchangeRate.setDate(date);
-            exchangeRate.setExchangeRate(rate);
-
-            return exchangeRate;
-        } catch (Exception e) {
-            log.warn("Skipping malformed line: {} — {}", Arrays.toString(parts), e.getMessage());
-            return null;
-        }
-    }
-
-    public InputStream openUrlStream(String url) throws IOException {
-        return new URL(url).openStream();
-    }
-
-    private String buildTsId(String currency) {
-        return String.format(tsIdTemplate, currency);
-    }
-
-    private String buildUrl(String tsId) {
-        return String.format(urlTemplate, tsId);
-    }
-
-    private BigDecimal parseRate(String rateStr) {
-        return (rateStr == null || rateStr.isBlank() || rateStr.equals(".") || rateStr.equals("-"))
-                ? BigDecimal.ZERO
-                : new BigDecimal(rateStr.replace(",", "."));
-    }
-
-    private boolean isValidRate(String rateStr) {
-        return rateStr != null && !rateStr.isBlank() && !rateStr.equals(".") && !rateStr.equals("-");
+        log.error("No provider could fetch rates for currency: {}", currency);
     }
 }
 

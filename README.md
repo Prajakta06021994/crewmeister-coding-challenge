@@ -9,6 +9,7 @@ This repository contains a Spring Boot application developed as part of a take-h
 - Fetch and store exchange rates for all supported currencies from the Bundesbank public API.
 - At application startup, a `@PostConstruct` method automatically fetches exchange rates and stores them in the database.
 - A scheduled job runs every Monday at 6 AM to check for new currencies and fetch exchange rates to store them.
+- Strategy Pattern implemented to support future external data providers beyond Bundesbank, making the system easily extensible.
 - API endpoints to:
     - List supported currencies.
     - Fetch all exchange rates
@@ -20,6 +21,7 @@ This repository contains a Spring Boot application developed as part of a take-h
 - Dockerized application with Kubernetes support for local development.
 - Postman collection included for easy testing of APIs.
 - JaCoCo plugin integrated with 90%+ unit test coverage.
+- Environment-based configurations(dev, prod etc).
 
 ---
 
@@ -37,13 +39,13 @@ This repository contains a Spring Boot application developed as part of a take-h
 ---
 
 ## 🛠️ How to Clone the Repository
-git clone https://github.com/Prajakta06021994/crewmeister-coding-challenge.git
+  git clone https://github.com/Prajakta06021994/crewmeister-coding-challenge.git
 
-cd crewmeister-coding-challenge
+  cd crewmeister-coding-challenge
 
-🧪 How to Run Locally (Dev Mode)
+# How to Run Locally (Dev Mode)
 # Build and run the application
-./mvnw spring-boot:run
+  ./mvnw spring-boot:run
 
 Once the application starts:
 A scheduled job will run automatically.
@@ -53,11 +55,11 @@ If data is lost (e.g., after restart), you can trigger the fetch manually using 
 # Testing & Coverage
 Run Tests and Generate Report
 
-./mvnw clean verify
+  ./mvnw clean verify
 
 View Coverage Report (JaCoCo)
 
-open target/site/jacoco/index.html
+  open target/site/jacoco/index.html
 
 ✅ Achieved 90%+ unit test coverage
 
@@ -65,7 +67,9 @@ open target/site/jacoco/index.html
 
 ✅ Prerequisites:
 
-To create jar :- ./mvnw clean package
+To create jar :- 
+
+  ./mvnw clean package
 
 Docker Desktop
 
@@ -75,28 +79,54 @@ Enable Kubernetes support in Docker settings (if running via Kubernetes)
 
 Build Docker image
 
-docker build -t fx-app:latest .
+  IMPORTANT: Navigate to the project root directory first then run docker command
+  
+  cd path/to/crewmeister-coding-challenge
+
+  docker build -t fx-app:latest .
 
 # Running with Kubernetes
 
 Kubernetes manifests provided in k8s/ directory.
 
-kubectl apply -f k8s/deployment.yaml
+  kubectl apply -f k8s/deployment.yaml
 
-kubectl apply -f k8s/service.yaml
+  kubectl apply -f k8s/service.yaml
 
-kubectl apply -f k8s/configmap.yaml 
+  kubectl apply -f k8s/configmap.yaml 
 
-kubectl get svc fx-service 
+  kubectl get svc fx-service 
 
-Access the application
+  If your app is running in Kubernetes (e.g., via kubectl apply -f), 
+  get the pod name:
+
+  kubectl get pods
+
+  Then stream logs:
+
+  kubectl logs -f <pod-name>
+
+Once app started successfully. Access the application using command.
   
-kubectl port-forward service/fx-service 8080:8080
+  kubectl port-forward service/fx-service 8080:8080
 
 # Postman Collection
 A Postman collection is provided in the repo:
 
-📁 /postman/CrewmeisterFX.postman_collection.json
+👉 Steps to Import into Postman
+-Open Postman.
+
+-Click the "Import" button (top-left).
+
+-Choose the "File" tab.
+
+-Click "Choose Files" and select the file: postman directory is provided in repo
+
+    📁 /postman/CrewmeisterFX.postman_collection.json
+
+-Click "Import".
+
+Start sending requests to below endpoints.
 
 # Import it into Postman to test all available endpoints.
 
