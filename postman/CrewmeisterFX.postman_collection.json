@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "http://localhost:8081/api/save",
+			"name": "http://localhost:8080/api/save",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -27,12 +27,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/save",
+					"raw": "http://localhost:8080/api/save",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"api",
 						"save"
@@ -42,7 +42,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8081/api/currencies",
+			"name": "http://localhost:8080/api/currencies",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -50,12 +50,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/api/currencies",
+					"raw": "http://localhost:8080/api/currencies",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"api",
 						"currencies"
@@ -65,7 +65,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8081/api/exchange-rates",
+			"name": "http://localhost:8080/api/exchange-rates",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -73,12 +73,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/api/exchange-rates",
+					"raw": "http://localhost:8080/api/exchange-rates",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"api",
 						"exchange-rates"
@@ -88,7 +88,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8081/api/exchange-rates/2000-02-01",
+			"name": "http://localhost:8080/api/exchange-rates/2000-02-01",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -96,12 +96,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/api/exchange-rates/2000-02-01",
+					"raw": "http://localhost:8080/api/exchange-rates/2000-02-01",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"api",
 						"exchange-rates",
@@ -112,7 +112,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8081/api/convert?currency=AUD&amount=0&date=3000-10-17",
+			"name": "http://localhost:8080/api/convert?currency=AUD&amount=0&date=3000-10-17",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -120,12 +120,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8081/api/convert?currency=AUD&amount=0&date=3000-10-17",
+					"raw": "http://localhost:8080/api/convert?currency=AUD&amount=0&date=3000-10-17",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"api",
 						"convert"

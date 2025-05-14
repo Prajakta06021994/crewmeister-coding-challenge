@@ -9,6 +9,7 @@ import java.util.List;
 @Component
 @Getter
 public class SupportedCurrenciesConfig {
+    //Lists all available foreign currencies
     private static final List<String> SUPPORTED_CURRENCIES = Arrays.asList(
             "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN",
             "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL",

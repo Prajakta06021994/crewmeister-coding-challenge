@@ -111,6 +111,7 @@ public class ExchangeRateService {
                 .forEach(this::fetchAndStoreExchangeRates);
     }
 
+    // Logic to fetch and parse CSV from Bundesbank
     @Transactional
     public void fetchAndStoreExchangeRates(String currency) {
         var tsId = buildTsId(currency);

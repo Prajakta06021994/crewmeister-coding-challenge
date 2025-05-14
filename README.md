@@ -8,7 +8,7 @@ This repository contains a Spring Boot application developed as part of a take-h
 
 - Fetch and store exchange rates for all supported currencies from the Bundesbank public API.
 - At application startup, a `@PostConstruct` method automatically fetches exchange rates and stores them in the database.
-- A scheduled job runs every week at 6 AM to check for new currencies and fetch exchange rates to store them.
+- A scheduled job runs every Monday at 6 AM to check for new currencies and fetch exchange rates to store them.
 - API endpoints to:
     - List supported currencies.
     - Fetch all exchange rates
